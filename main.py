@@ -11,7 +11,7 @@ https://github.com/HKUST-KnowComp/R-Net
 
 
 from model import Model
-from demo import Demo
+# from demo import Demo
 from util import get_record_parser, convert_tokens, evaluate, get_batch_dataset, get_dataset
 
 
@@ -118,16 +118,16 @@ def evaluate_batch(model, num_batches, eval_file, sess, data_type, handle, str_h
     return metrics, [loss_sum, f1_sum, em_sum]
 
 
-def demo(config):
-    with open(config.word_emb_file, "r") as fh:
-        word_mat = np.array(json.load(fh), dtype=np.float32)
-    with open(config.char_emb_file, "r") as fh:
-        char_mat = np.array(json.load(fh), dtype=np.float32)
-    with open(config.test_meta, "r") as fh:
-        meta = json.load(fh)
+# def demo(config):
+#     with open(config.word_emb_file, "r") as fh:
+#         word_mat = np.array(json.load(fh), dtype=np.float32)
+#     with open(config.char_emb_file, "r") as fh:
+#         char_mat = np.array(json.load(fh), dtype=np.float32)
+#     with open(config.test_meta, "r") as fh:
+#         meta = json.load(fh)
 
-    model = Model(config, None, word_mat, char_mat, trainable=False, demo = True)
-    demo = Demo(model, config)
+#     model = Model(config, None, word_mat, char_mat, trainable=False, demo = True)
+#     demo = Demo(model, config)
 
 
 def test(config):
