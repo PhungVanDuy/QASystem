@@ -11,7 +11,6 @@ from model import Model
 import os
 from prepro import convert_to_features, word_tokenize
 from time import sleep
-from main import train, test, demo
 
 flags = tf.flags
 
