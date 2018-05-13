@@ -175,14 +175,14 @@ def main():
         meta = json.load(fh)
     model = Model(config, None, word_mat, char_mat, trainable=False, demo = True)
     inference = Inference(model, config)
-    passage = 'Ronaldo Luis Nazario de Lima born 18 September 1976, commonly known as Ronaldo, is a retired Brazilian professional footballer who played as a striker.\
+    passage = u'Ronaldo Luis Nazario de Lima born 18 September 1976, commonly known as Ronaldo, is a retired Brazilian professional footballer who played as a striker.\
     Popularly dubbed "O Fenomeno" (The Phenomenon), he is widely considered to be one of the greatest football players of all time.\
     In his prime, he was known for his dribbling at speed, feints, and clinical finishing. \
     At his best in the 1990s, Ronaldo starred at club level for Cruzeiro, PSV, Barcelona, and Internazionale. \
     His moves to Spain and Italy made him only the second player, after Diego Maradona, to break the world transfer record twice, all before his 21st birthday.\
     At age 23, he had scored over 200 goals for club and country. \
     After almost three years of inactivity due to serious knee injuries and recuperation, Ronaldo joined Real Madrid in 2002, which was followed by spells at Milan and Corinthians.'
-    print inference.request(unicode(passage, 'utf-8'), u'What is the nickname of Ronaldo?')
+    print(inference.request(passage, u'What is the nickname of Ronaldo?'))
 
 if __name__=='__main__':
     main()
