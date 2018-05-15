@@ -170,12 +170,12 @@ class Model(object):
             outer = tf.matrix_band_part(outer, 0, 15)
             self.yp1 = tf.argmax(tf.reduce_max(outer, axis=2), axis=1)
             self.yp2 = tf.argmax(tf.reduce_max(outer, axis=1), axis=1)
+            self.prob_score = [tf.reduce_max(outer, axis=2), tf.reduce_max(outer, axis=1)]
             losses = tf.nn.softmax_cross_entropy_with_logits(
                 logits=logits1, labels=self.y1)
             losses2 = tf.nn.softmax_cross_entropy_with_logits(
                 logits=logits2, labels=self.y2)
             self.loss = tf.reduce_mean(losses + losses2)
-
         if config.l2_norm is not None:
             variables = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
             l2_loss = tf.contrib.layers.apply_regularization(regularizer, variables)

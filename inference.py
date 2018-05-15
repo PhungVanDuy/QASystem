@@ -11,7 +11,7 @@ from model import Model
 import os
 from prepro import convert_to_features, word_tokenize
 from time import sleep
-
+import torch
 flags = tf.flags
 
 home = os.path.expanduser("~")
@@ -160,10 +160,18 @@ class Inference(object):
                         'question:0': [q],
                         'context_char:0': [ch],
                         'question_char:0': [qh]}
-                    yp1,yp2 = sess.run([self.model.yp1, self.model.yp2], feed_dict = fd)
+                    yp1,yp2,probs = sess.run([self.model.yp1, self.model.yp2, self.model.prob_score], feed_dict = fd)
+                    print(probs)
                     yp2[0] += 1
                     response = " ".join(context[yp1[0]:yp2[0]])
-                    return response
+                    print(probs[0].reshape(-1))
+                    print(probs[0].reshape(-1).shape[0])
+                    scores = torch.ger(torch.Tensor(probs[0].reshape(-1)), torch.Tensor(probs[1].reshape(-1)))
+                    scores.triu_().tril_(probs[0].reshape(-1).shape[0] - 1)
+                    scores = scores.numpy()
+                    scores_flat = scores.flatten()
+                    sc = max(scores_flat)
+                    return (response, sc)
 
 def main():
     config = flags.FLAGS
@@ -182,7 +190,15 @@ def main():
     His moves to Spain and Italy made him only the second player, after Diego Maradona, to break the world transfer record twice, all before his 21st birthday.\
     At age 23, he had scored over 200 goals for club and country. \
     After almost three years of inactivity due to serious knee injuries and recuperation, Ronaldo joined Real Madrid in 2002, which was followed by spells at Milan and Corinthians.'
+    passage2 = u'Ronaldo won the FIFA World Player of the Year three times, in 1996, 1997 and 2002, and the Ballon d\'Or twice, in 1997 and 2002, as well as the UEFA Club Footballer of the Year in 1998.\
+    He was La Liga Best Foreign Player in 1997, when he also won the European Golden Boot after scoring 34 goals in La Liga, and he was named Serie A Footballer of the Year in 1998. \
+    One of the most marketable sportsmen in the world, the first Nike Mercurial boots–R9–were commissioned for Ronaldo in 1998. \
+    He was named in the FIFA 100, a list of the greatest living players compiled in 2004 by Pelé, and was inducted into the Brazilian Football Museum Hall of Fame and the Italian Football Hall of Fame.'
+
     print(inference.request(passage, u'What is the nickname of Ronaldo?'))
+    passage3 = u'Population of Vietnam as standing at approximately 90.7 million people. The population had grown significantly from the 1979 census, which showed the total population of reunified Vietnam to be 52.7 million. In 2012, the country population was estimated at approximately 90.3 million. Currently, the total fertility rate of Vietnam is 1.8 (births per woman), which is largely due to the government family planning policy, the two-child policy.'
+    print(inference.request(passage3, u'How many population of Vietnam?'))
+
 
 if __name__=='__main__':
     main()
