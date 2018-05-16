@@ -16,3 +16,6 @@ or download data at [link](https://drive.google.com/open?id=1KUeuSh8U9ZWzHtf3OWI
 ```
     python inference.py
 ```
+
+## Model of RNet ref at:
+1. Ref: https://github.com/HKUST-KnowComp/R-Net
